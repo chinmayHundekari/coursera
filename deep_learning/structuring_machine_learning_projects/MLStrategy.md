@@ -20,4 +20,32 @@ pandoc MLStrategy.md -f markdown+tex_math_dollars -s -o MLStrategy.html --mathja
 * Early stopping is less orthogonal, as it affects multiple features, hence not preferred.
 
 # Single number evaluation metric
-* 
+## Metrics
+* Positive Samples - Part of the classification. 
+* Negative Samples - Not part of the classification.
+* True Positives - Correctly Identified Positive Samples
+* False Positives - Incorrectly Identified Positive Samples
+* True Negatives - Correctly Identified Negative Samples
+* False Negatives - Incorrectly Identified Negative Samples
+* Accuracy - 
+$$ Accuracy = \frac{TP + TN}{TP + TN + FP + FN} $$
+* Accuracy may not accurately represent a class imbalanced data set, where TP are few.
+* Precision - What percentage of recognized class were correctly recognized? or True Positives.
+$$ Precision = \frac{TP}{TP + FP} $$
+* Recall - What percentage of all positive samples were recognized? or True Positives/(All Positives)
+$$ Recall = \frac{TP}{TP + FN} $
+* Receiver Operating Characteristic Curve - Graph of TP Rate vs FP Rate
+$$ True Postive Rate(TPR) = \frac{TP}{TP + FN}
+$$ False Postive Rate(FPR) = \frac{FP}{FP + TN}
+* F1 Score - Harmonic mean of P and R 
+$$ F1 = \frac{2}{\frac{1}{P} + \frac{1}{R}} $$
+
+* Satisficing metric - certain conditions should be satisfied. - e.g. running time should be less than 100ms.
+* Optimizing metric - Certain conditions need to be as good aspossible - e.g. Accuracy.
+
+# Training/dev/test distributions
+* Dev and test sets should be from same distribution
+* Purpose of test set is only to provide a high confidence.
+* Deep learning algorithms require a lot of data, pushing training data to be maximum of all samples.
+* Evaluation metric should not confuse Positives and Negatives. e.g. Scenario - Spam should not be allowed - Positives are spam
+* Evaluation metric should not ignore Negatives which may have a bigger cost. e.g. Cat classifier for kids, may show FP on adult images. The metric should have a higher cost on certain FP.

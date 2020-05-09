@@ -31,7 +31,11 @@
 <ul>
 <li><a href="#to-execute">To execute:</a></li>
 <li><a href="#orthogonalization">Orthogonalization</a></li>
-<li><a href="#single-number-evaluation-metric">Single number evaluation metric</a></li>
+<li><a href="#single-number-evaluation-metric">Single number evaluation metric</a>
+<ul>
+<li><a href="#metrics">Metrics</a></li>
+</ul></li>
+<li><a href="#trainingdevtest-distributions">Training/dev/test distributions</a></li>
 </ul>
 </nav>
 <h1 id="to-execute">To execute:</h1>
@@ -52,8 +56,31 @@
 <li>Early stopping is less orthogonal, as it affects multiple features, hence not preferred.</li>
 </ul>
 <h1 id="single-number-evaluation-metric">Single number evaluation metric</h1>
+<h2 id="metrics">Metrics</h2>
 <ul>
-<li></li>
+<li><p>Positive Samples - Part of the classification.</p></li>
+<li><p>Negative Samples - Not part of the classification.</p></li>
+<li><p>True Positives - Correctly Identified Positive Samples</p></li>
+<li><p>False Positives - Incorrectly Identified Positive Samples</p></li>
+<li><p>True Negatives - Correctly Identified Negative Samples</p></li>
+<li><p>False Negatives - Incorrectly Identified Negative Samples</p></li>
+<li><p>Accuracy - <span class="math display">\[ Accuracy = \frac{TP + TN}{TP + TN + FP + FN} \]</span></p></li>
+<li><p>Accuracy may not accurately represent a class imbalanced data set, where TP are few.</p></li>
+<li><p>Precision - What percentage of recognized class were correctly recognized? or True Positives. <span class="math display">\[ Precision = \frac{TP}{TP + FP} \]</span></p></li>
+<li><p>Recall - What percentage of all positive samples were recognized? or True Positives/(All Positives) $$ Recall =  $</p></li>
+<li><p>Receiver Operating Characteristic Curve - Graph of TP Rate vs FP Rate <span class="math display">\[ True Postive Rate(TPR) = \frac{TP}{TP + FN}
+\]</span> False Postive Rate(FPR) = </p></li>
+<li><p>F1 Score - Harmonic mean of P and R <span class="math display">\[ F1 = \frac{2}{\frac{1}{P} + \frac{1}{R}} \]</span></p></li>
+<li><p>Satisficing metric - certain conditions should be satisfied. - e.g. running time should be less than 100ms.</p></li>
+<li><p>Optimizing metric - Certain conditions need to be as good aspossible - e.g. Accuracy.</p></li>
+</ul>
+<h1 id="trainingdevtest-distributions">Training/dev/test distributions</h1>
+<ul>
+<li>Dev and test sets should be from same distribution</li>
+<li>Purpose of test set is only to provide a high confidence.</li>
+<li>Deep learning algorithms require a lot of data, pushing training data to be maximum of all samples.</li>
+<li>Evaluation metric should not confuse Positives and Negatives. e.g. Scenario - Spam should not be allowed - Positives are spam</li>
+<li>Evaluation metric should not ignore Negatives which may have a bigger cost. e.g. Cat classifier for kids, may show FP on adult images. The metric should have a higher cost on certain FP.</li>
 </ul>
 </body>
 </html>
