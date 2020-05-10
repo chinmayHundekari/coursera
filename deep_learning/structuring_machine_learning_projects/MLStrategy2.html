@@ -31,6 +31,9 @@
 <li><a href="#to-execute">To execute:</a></li>
 <li><a href="#error-analysis">Error analysis</a></li>
 <li><a href="#mismatched-training-and-devtest-set-error">Mismatched training and dev/test set error</a></li>
+<li><a href="#transfer-learning">Transfer learning</a></li>
+<li><a href="#multi-task-learning">Multi task learning</a></li>
+<li><a href="#end-to-end-learning">End to End Learning</a></li>
 </ul>
 </nav>
 <h1 id="to-execute">To execute:</h1>
@@ -60,6 +63,23 @@
 <li>If dev error &lt; training-dev error ~= training error, then there is a data mismatch issue.</li>
 </ol></li>
 <li>Use data synthesis to fix data mismatch error.</li>
+</ul>
+<h1 id="transfer-learning">Transfer learning</h1>
+<ul>
+<li>Swap a new dataset and add a new Layer and retrain only that layer. This is useful when parts of the problem has lots of data, but for the final solution the data is very less.</li>
+<li>Pretraining - Solving a partial problem - like shape detection.</li>
+<li>Final tuning - Final solution tuning.</li>
+<li>It cannot be used, when the learning does not have anything in common with final solution.</li>
+</ul>
+<h1 id="multi-task-learning">Multi task learning</h1>
+<ul>
+<li>Classification with multiple labels instead of 1.</li>
+</ul>
+<h1 id="end-to-end-learning">End to End Learning</h1>
+<ul>
+<li>Instead of splitting problem into sequential steps, A single neural network learns all the steps.</li>
+<li>This works, when there is lot of data.</li>
+<li>Splitting the problem into smaller problems may not be ideal when machine has a different understanding of the solution space than humans.</li>
 </ul>
 </body>
 </html>

@@ -29,3 +29,16 @@ pandoc MLStrategy2.md -f markdown+tex_math_dollars -s -o MLStrategy2.html --math
     4. If dev error < training-dev error ~= training error, then there is a data mismatch issue.
 * Use data synthesis to fix data mismatch error.
 
+# Transfer learning
+* Swap a new dataset and add a new Layer and retrain only that layer. This is useful when parts of the problem has lots of data, but for the final solution the data is very less.
+* Pretraining - Solving a partial problem - like shape detection. 
+* Final tuning - Final solution tuning.
+* It cannot be used, when the learning does not have anything in common with final solution.
+
+# Multi task learning
+* Classification with multiple labels instead of 1.
+
+# End to End Learning
+* Instead of splitting problem into sequential steps, A single neural network learns all the steps.
+* This works, when there is lot of data.
+* Splitting the problem into smaller problems may not be ideal when machine has a different understanding of the solution space than humans.
