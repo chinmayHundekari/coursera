@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Chinmay Hundekari" />
+  <meta name="dcterms.date" content="2020-05-10" />
+  <title>Machine learning Strategy 2</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Machine learning Strategy 2</h1>
+<p class="author">Chinmay Hundekari</p>
+<p class="date">May 10, 2020</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<h2 id="toc-title">Table of Contents</h2>
+<ul>
+<li><a href="#to-execute">To execute:</a></li>
+<li><a href="#error-analysis">Error analysis</a></li>
+<li><a href="#mismatched-training-and-devtest-set-error">Mismatched training and dev/test set error</a></li>
+</ul>
+</nav>
+<h1 id="to-execute">To execute:</h1>
+<pre><code>pandoc MLStrategy2.md -f markdown+tex_math_dollars -s -o MLStrategy2.html --mathjax --toc -V toc-title:&quot;Table of Contents&quot;</code></pre>
+<h1 id="error-analysis">Error analysis</h1>
+<ul>
+<li>Estimate improvement that can be achieved before putting in effort to fix a classification error.</li>
+<li>Evaluating multiple ideas/improvements/errors in parallel, to reduce effort spent on training.</li>
+<li>Incorrectly labelled examples may not be a big issue, if the data set is large, or the effort to correct the labelling is costly.</li>
+<li>Build quickly and then iterate
+<ol type="1">
+<li>Set up a dev/test set metric</li>
+<li>Build initial system quickly.</li>
+<li>Use Error analysis to figure out what preprocessing needs to be added.</li>
+<li>Use Bias/variance analysis to reduce error.</li>
+</ol></li>
+</ul>
+<h1 id="mismatched-training-and-devtest-set-error">Mismatched training and dev/test set error</h1>
+<ul>
+<li>Larger amounts of data needed for deep learning encourages to get training data outside dev/test data distribution</li>
+<li>Adding addition data to training distribution is ok, but having test data equally to distributed between train, dev and test data is not ideal. Instead retain a higher concentration of original test data in test set.</li>
+<li>Split the training set into training and training-dev set. Only train on training set.
+<ol type="1">
+<li>If training error &gt;&gt; Bayer error, then there is a bias problem.</li>
+<li>If dev error ~= training-dev error &gt;&gt; training error, then there is a variance problem.</li>
+<li>If dev error &gt;&gt; training-dev error ~= training error, then there is a data mismatch issue.</li>
+<li>If dev error &lt; training-dev error ~= training error, then there is a data mismatch issue.</li>
+</ol></li>
+<li>Use data synthesis to fix data mismatch error.</li>
+</ul>
+</body>
+</html>

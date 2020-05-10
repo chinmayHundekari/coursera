@@ -1,12 +1,12 @@
 ---
-title: "Machine learning Strategy"
+title: "Machine learning Strategy 1"
 author: Chinmay Hundekari
 date: May 07, 2020
 ---
 
 # To execute:
 ~~~~
-pandoc MLStrategy.md -f markdown+tex_math_dollars -s -o MLStrategy.html --mathjax --toc -V toc-title:"Table of Contents"
+pandoc MLStrategy1.md -f markdown+tex_math_dollars -s -o MLStrategy1.html --mathjax --toc -V toc-title:"Table of Contents"
 ~~~~
 
 # Orthogonalization
@@ -44,8 +44,26 @@ $$ F1 = \frac{2}{\frac{1}{P} + \frac{1}{R}} $$
 * Optimizing metric - Certain conditions need to be as good aspossible - e.g. Accuracy.
 
 # Training/dev/test distributions
-* Dev and test sets should be from same distribution
+* Dev and test sets should be from same distribution. Train set may not be same distribution, but needs to be similar.
 * Purpose of test set is only to provide a high confidence.
 * Deep learning algorithms require a lot of data, pushing training data to be maximum of all samples.
 * Evaluation metric should not confuse Positives and Negatives. e.g. Scenario - Spam should not be allowed - Positives are spam
 * Evaluation metric should not ignore Negatives which may have a bigger cost. e.g. Cat classifier for kids, may show FP on adult images. The metric should have a higher cost on certain FP.
+
+# Comparing human level performance
+* Bayes Optimal error - Lowest possible error rate for classification. Human-level error can be assumed to be Bayes error.
+* Understanding Human level performance, hints us to know how much Bias-Variance tradeoff should be.
+* Avoidable bias - Bayes error - Training error
+* If Variance (Dev set error - Training error) is greater than Avoidable bias, then we should focus on reducing variance rather than bias.
+*  Problems which are not natural perception tasks, tend to have much lesser Human-level performance than Bayes optimal error.
+
+# Improving your model performance.
+1. You can reduce training set error - Reduce avoidable bias.
+    1. Train bigger model
+    2. Training longer/better optimization algorithms.
+    3. Different neural network architecture or better hyperparameter search
+    4. Reduce regularization, if variance is low, but test set performance is bad.
+2. You can reduce dev set error - Reduce variance.
+    1. More data
+    2. Regularization, L2, dropout, Data augumentation
+    3. Different neural network architecture or better hyperparameter search

@@ -36,6 +36,8 @@
 <li><a href="#metrics">Metrics</a></li>
 </ul></li>
 <li><a href="#trainingdevtest-distributions">Training/dev/test distributions</a></li>
+<li><a href="#comparing-human-level-performance">Comparing human level performance</a></li>
+<li><a href="#improving-your-model-performance.">Improving your model performance.</a></li>
 </ul>
 </nav>
 <h1 id="to-execute">To execute:</h1>
@@ -82,5 +84,28 @@
 <li>Evaluation metric should not confuse Positives and Negatives. e.g. Scenario - Spam should not be allowed - Positives are spam</li>
 <li>Evaluation metric should not ignore Negatives which may have a bigger cost. e.g. Cat classifier for kids, may show FP on adult images. The metric should have a higher cost on certain FP.</li>
 </ul>
+<h1 id="comparing-human-level-performance">Comparing human level performance</h1>
+<ul>
+<li>Bayes Optimal error - Lowest possible error rate for classification. Human-level error can be assumed to be Bayes error.</li>
+<li>Understanding Human level performance, hints us to know how much Bias-Variance tradeoff should be.</li>
+<li>Avoidable bias - Bayes error - Training error</li>
+<li>If Variance (Dev set error - Training error) is greater than Avoidable bias, then we should focus on reducing variance rather than bias.</li>
+<li>Problems which are not natural perception tasks, tend to have much lesser Human-level performance than Bayes optimal error.</li>
+</ul>
+<h1 id="improving-your-model-performance.">Improving your model performance.</h1>
+<ol type="1">
+<li>You can reduce training set error - Reduce avoidable bias.
+<ol type="1">
+<li>Train bigger model</li>
+<li>Traing longer/better optimiation algorithms.</li>
+<li>Different neural network architecture or better hyperparameter search</li>
+</ol></li>
+<li>You can reduce dev set error - Reduce variance.
+<ol type="1">
+<li>More data</li>
+<li>Regularization, L2, dropout, Data augumentation</li>
+<li>Different neural network architecture or better hyperparameter search</li>
+</ol></li>
+</ol>
 </body>
 </html>
