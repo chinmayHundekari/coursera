@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Chinmay Hundekari" />
+  <meta name="dcterms.date" content="2020-05-16" />
+  <title>Convolutional Neural Networks</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Convolutional Neural Networks</h1>
+<p class="author">Chinmay Hundekari</p>
+<p class="date">May 16, 2020</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<h2 id="toc-title">Table of Contents</h2>
+<ul>
+<li><a href="#to-execute">To execute:</a></li>
+<li><a href="#week-1">Week 1</a>
+<ul>
+<li><a href="#computer-vision">Computer Vision</a></li>
+<li><a href="#edge-detection">Edge Detection</a></li>
+<li><a href="#padding">Padding</a></li>
+<li><a href="#strided-convolutions">Strided Convolutions</a></li>
+<li><a href="#convolutions-over-volumes">Convolutions over volumes</a>
+<ul>
+<li><a href="#convolutions-on-rgb-images">Convolutions on RGB images</a></li>
+</ul></li>
+<li><a href="#one-layer-of-convolutional-network">One layer of convolutional network</a>
+<ul>
+<li><a href="#forward-propagation">Forward propagation</a></li>
+</ul></li>
+<li><a href="#pooling-layers">Pooling layers</a></li>
+<li><a href="#example---lenet--5">Example - LeNet -5</a></li>
+</ul></li>
+<li><a href="#week-2">Week 2</a>
+<ul>
+<li><a href="#neural-network-architectures">Neural Network Architectures</a>
+<ul>
+<li><a href="#lenet-5">LeNet-5</a></li>
+<li><a href="#transfer-learning">Transfer learning</a></li>
+<li><a href="#state-of-computer-vision">State of Computer vision</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="to-execute">To execute:</h1>
+<pre><code>pandoc ConvolutionalNeuralNetworks.md -f markdown+tex_math_dollars -s -o ConvolutionalNeuralNetworks.html --mathjax --toc -V toc-title:&quot;Table of Contents&quot;</code></pre>
+<h1 id="week-1">Week 1</h1>
+<h2 id="computer-vision">Computer Vision</h2>
+<ul>
+<li>Rapid advances are happening in Computer vision. Great creative community.</li>
+<li>Object Detection - Identify object and put a box around it.</li>
+<li>Neural Style transfer - Transfer image of a particular style to another.</li>
+<li>Even a simple image of 1 megapxel requires 1000<em>1000</em>3 neurals in the first layer. This is infeasible. Convolution helps fix this.</li>
+</ul>
+<h2 id="edge-detection">Edge Detection</h2>
+<ul>
+<li>Convolution symbol - <span class="math inline">\(*\)</span> <span class="math display">\[ Image[m,n] * filter[x,y] = Output[m-x+1,n-y+1] \]</span> <span class="math display">\[ \rightarrow Image_{ij}[x,y] \cdot filter[x,y] = Output_{ij} \]</span> <span class="math display">\[\begin{bmatrix}
+ &amp;_{00}&amp;_{01}&amp;_{02}&amp;_{03}&amp;_{04}&amp;_{05} \\ 
+ &amp;_{10}&amp;_{11}&amp;_{12}&amp;_{13}&amp;_{14}&amp;_{25} \\ 
+ &amp;_{20}&amp;_{21}&amp;_{22}&amp;_{23}&amp;_{24}&amp;_{35} \\ 
+ &amp;_{03}&amp;_{31}&amp;_{32}&amp;_{33}&amp;_{34}&amp;_{35} \\ 
+ &amp;_{40}&amp;_{41}&amp;_{42}&amp;_{43}&amp;_{44}&amp;_{45} \\ 
+ &amp;_{50}&amp;_{51}&amp;_{52}&amp;_{53}&amp;_{54}&amp;_{55} \\ 
+\end{bmatrix} * \begin{bmatrix}
+ &amp;_{00}&amp;_{01}&amp;_{02} \\ 
+ &amp;_{10}&amp;_{11}&amp;_{12} \\ 
+ &amp;_{20}&amp;_{21}&amp;_{22} \\ 
+\end{bmatrix} = \begin{bmatrix}
+ &amp;_{00}&amp;_{01}&amp;_{02}&amp;_{03}&amp;_{04} \\ 
+ &amp;_{10}&amp;_{11}&amp;_{12}&amp;_{13}&amp;_{14} \\ 
+ &amp;_{20}&amp;_{21}&amp;_{22}&amp;_{23}&amp;_{24} \\ 
+ &amp;_{03}&amp;_{31}&amp;_{32}&amp;_{33}&amp;_{34} \\ 
+\end{bmatrix} \]</span></li>
+<li>python - convforward();tensorflow - tf.nn.conv2d ### filters <span class="math display">\[ Vertical Edge detection filter = \begin{bmatrix}
+ &amp;1&amp;0&amp;-1 \\ 
+ &amp;1&amp;0&amp;-1 \\ 
+ &amp;1&amp;0&amp;-1 \\ 
+\end{bmatrix}  \]</span> <span class="math display">\[ Horizontal Edge detection filter = \begin{bmatrix}
+ &amp;1&amp;1&amp;1 \\ 
+ &amp;0&amp;0&amp;0 \\ 
+ &amp;-1&amp;-1&amp;-1 \\ 
+\end{bmatrix}  \]</span> <span class="math display">\[ Sobel filter = \begin{bmatrix}
+ &amp;1&amp;0&amp;-1 \\ 
+ &amp;2&amp;0&amp;-2 \\ 
+ &amp;1&amp;0&amp;-1 \\ 
+\end{bmatrix}  \]</span> <span class="math display">\[ Scharr filter = \begin{bmatrix}
+ &amp;&amp;0&amp;-3 \\ 
+ &amp;10&amp;0&amp;-10 \\ 
+ &amp;3&amp;0&amp;-3 \\ 
+\end{bmatrix}  \]</span></li>
+<li>Too many filters. Maybe we can use deeplearning and treat the filter as parameters :-)</li>
+</ul>
+<h2 id="padding">Padding</h2>
+<ul>
+<li>The corner edges of input are used in convolution less than Inner data.</li>
+<li>Deep neural networks need maximum information preserved. It might be better if convolution did not reduce input data size.</li>
+<li>Padding by p pixel on each side. This results should be a convolutional output of same size as input. <span class="math display">\[ n \times n * f \times f = (n - f + 1) \times (n - f + 1) \]</span> <span class="math display">\[ (n + 2p) \times (n + 2p) * f \times f = (n + 2p - f + 1) \times (n +2p - f + 1) \]</span> For output size to be same as input size <span class="math display">\[ n + 2p - f + 1 = n\]</span> <span class="math display">\[ p =\frac{f - 1}{2} \]</span></li>
+<li>f is normally odd, to avoid asymmetric padding.</li>
+</ul>
+<h2 id="strided-convolutions">Strided Convolutions</h2>
+<ul>
+<li>For Stride = 2 - <span class="math display">\[ \rightarrow Image_{ij}[2x,2y] \cdot filter[x,y] = Output_{ij} \]</span> $$ Output Size =  + 1 </li>
+<li>Ideal to round down if size is fractional.</li>
+<li>Sometime, the filter matrix may be flipped across both axis. As we are skipping this step, this is better called cross correlation. But it Deep learning, it is just called convolution. We have sacrificed associativity property. But this does not affect Deep learning.</li>
+</ul>
+<h2 id="convolutions-over-volumes">Convolutions over volumes</h2>
+<h3 id="convolutions-on-rgb-images">Convolutions on RGB images</h3>
+<ul>
+<li>Image data is Height * Width * Number of Channels(RGB). Filter also has same dimensions.</li>
+<li>Strides are taken only across width and height, not channels!</li>
+</ul>
+<h2 id="one-layer-of-convolutional-network">One layer of convolutional network</h2>
+<h3 id="forward-propagation">Forward propagation</h3>
+<ul>
+<li>Convolution replaces weight - <span class="math display">\[ a^{[l]} = ReLU(X * f + b),  b \in \mathbb{R^{3}}, X \in R^{3}, f in \mathbb{R^{3}} \]</span></li>
+<li>Number of parameters for a filter remains at (filter height * filter width + 1 for bias ) multiplied by number of channels.</li>
+<li>So number of parameters to learn remains small. As number of parameters are small, the chances of overfitting are less. <span class="math display">\[  filter size = f^{[l]}, padding size = p^{[l]}, stride = ^{[l]}, n_{c}^{[l]} = number of filters/channels \]</span> <span class="math display">\[ Input: n_{h}^{[l-1]} \times n_{w}^{[l-1]} \times n_{c}^{[l-1]} \]</span> <span class="math display">\[ Output: n_{h}^{[l]} \times n_{w}^{[l]} \times n_{c}^{[l]} \]</span> <span class="math display">\[ n_{w}^{[l]} =  \lfloor \frac{n_{w}^{[l-1]} + 2p^{[l]}- f^{[l]}}{S^{[l]}} + 1 \rfloor \]</span> <span class="math display">\[ n_{h}^{[l]} =  \lfloor \frac{n_{h}^{[l-1]} + 2p^{[l]}- f^{[l]}}{S^{[l]}} + 1 \rfloor \]</span> <span class="math display">\[ Input data : h*w*c \]</span> <span class="math display">\[ Output layer : (n+2p-f)/s +1 * (n+2p-f)/s * Number of filters \]</span></li>
+<li>Unroll last layer output and use logistic regression/softmax to obtain the result</li>
+<li>Channels generally increase and height and width reduces</li>
+<li>Types of layers:
+<ol type="1">
+<li>Convolution</li>
+<li>Pooling</li>
+<li>Fully connected</li>
+</ol></li>
+</ul>
+<h2 id="pooling-layers">Pooling layers</h2>
+<ul>
+<li>Max pooling: For a filter size of and stride of s, max pooling is maximum in each of those matrix, instead of convolution operation. Mostly only maximum value may be important.</li>
+<li>Padding is usually avoided. <span class="math display">\[ n_{w}^{[l]} =  \lfloor \frac{n_{w}^{[l-1]} + 2p^{[l]}- f^{[l]}}{S^{[l]}} + 1 \rfloor \]</span> <span class="math display">\[ Output layer : (n+2p-f)/s +1 \times (n+2p-f)/s \times Number of channels \]</span></li>
+<li>Average pooling : Take average instead of max.</li>
+<li>No learning in this layer</li>
+</ul>
+<h2 id="example---lenet--5">Example - LeNet -5</h2>
+<ul>
+<li>32x32x3 –&gt; Layer1 [–Conv(f=5,s=1)–&gt; Conv1 (28x28x6) –Maxpool(f=2,s=20)–&gt; 14x14x6 ] –&gt;Layer 2 [–Conv(f=5,s=1)–&gt;10x10x16 –Maxpool(f=2,s=2)–&gt; 5x5x16] –&gt; 400x1 –&gt; FC3(120,400) –&gt; FC4(84,1)–&gt;10 outputs</li>
+<li>Parameter Sharing: Filters are reused in the image</li>
+<li>Sparsity of connections: In each layer, each output value only depends on few inputs. So, overfitting a label reduces.</li>
+<li>If a cat image is shifted, this can still be detected, because of convolution filter!</li>
+</ul>
+<h1 id="week-2">Week 2</h1>
+<h2 id="neural-network-architectures">Neural Network Architectures</h2>
+<h3 id="lenet-5">LeNet-5</h3>
+<ul>
+<li>Image of 32x32x1–Conv(5x5,s=1)–&gt;28x28x6–AvgPool(f=2,s=2)–&gt;14x14x6–Conv(5x5,s=1)–&gt;10x10x16–AvgPool(f=2,s=2)–&gt;5x5x16–FC()–&gt;120–FC()–&gt;84–Softmax–&gt;y ### AlexNet</li>
+<li>Image of 227x227x3–Conv(11x11,s=4,c=96)–&gt;55x55x96–MaxPool(3x3,s=2)–&gt;27x27x96–Conv(5x5,s=1)–&gt;27x27x256–MaxPool(f=3,s=2)–&gt;13x13x256–Conv(3x3)–&gt;13x13x384–Conv(3x3)–&gt;13x13x384–Conv(3x3)–&gt;13x13x384–MaxPool(f=3,s=2)–&gt;6x6x256–FC()–&gt;9216–FC()–&gt;4096–FC()–&gt;4096–Softmax–&gt;y[1000] ### VGG-16</li>
+<li>All filters –&gt; Conv(3x3,s=1), MaxPool(2x2,s=2)</li>
+<li>224x224x3–Conv(c=64)–&gt;224x224x64–Conv(c=64)–&gt;224x224x64–Maxpool()–&gt;112x112x64–Conv(c=128)–&gt;224x224x128–Conv(c=128)–&gt;224x224x128–Maxpool()–&gt;112x112x128–Conv(c=256)–&gt;224x224x256–Conv(c=256)–&gt;224x224x256–Maxpool()–&gt;112x112x256–Conv(c=512)–&gt;224x224x512–Conv(c=512)–&gt;224x224x512–Maxpool()–&gt;112x112x512 ### ResNet #### Residual Block <span class="math display">\[ z^{[l+1]} = W^{[l+1]}a^{[l]} + b^{[l+1]} \]</span> <span class="math display">\[ a^{[l+1]} = ReLU(z^{[l+1]}) \]</span> <span class="math display">\[ z^{[l+2]} = W^{[l+2]}a^{[l+1]} + b^{[l+2]} \]</span> <span class="math display">\[ a^{[l+2]} = ReLU(z^{[l+2]} \mathbf{+ a^{[l]}}) \]</span></li>
+<li>Training error get deeper as layers increase in Plain networks. ResNet fix this issue.</li>
+<li>Intermediate Layers which zero out activation are reduced, as some activations skip the layer. ### 1x1 Convolution - Network in Network(2013)</li>
+<li>XxYxC2 = ReLU(XxYxC1 * 1x1xC2) ### Inception Network - [Szegedy et al., 2014, Going Deeper with Convolutions]</li>
+<li>Apply multiple separate filters and concatenate outputs. Let back propagation find the best combination.</li>
+<li>Next layers add up a massive computation cost, as the size is much larger. 1x1 Convolutions reduce the massive computation cost, as they reduce channels. ’’’ X -|————————-Conv(1x1x64)–| |———–Conv(1x1x16)–Conv(5x5x32)–| |———-Conv(1x1x96)–Conv(3x3x128)–&gt; ChannelConcat() –&gt; 28x28x256 |–MaxPool(3x3,s=1,same)–Conv(3x3x32)–| ’’’</li>
+<li>Inception Network also has a softmax output branched in the middle of network. This also helps to avoid over fitting. ## Practical advice ### Open-Source Implementations</li>
+<li>Look for an open-source implementations instead of implementing papers. As implementation detail may be too finicky.</li>
+</ul>
+<h3 id="transfer-learning">Transfer learning</h3>
+<ul>
+<li>Using pre-trained networks help to replicate papers, as some of the networks may take weeks.</li>
+<li>For smaller datasets - Use same network, except for softmax layer and retrain the network.</li>
+<li>For larger dataset - Then number of layers you freeze could be reduced.</li>
+<li>For much larger dataset - Use weights only for initialization.</li>
+<li>Very good for Computer Vision applications. ### Data Augmentation</li>
+<li>Reduces the chances that you overfit to hidden features.</li>
+<li>Mirroring - Mirror images to double your data now!</li>
+<li>Random cropping - Randomly crop your data to multiply it many times!</li>
+<li>Color shifting - Add color distortions to create more images. Refer PCA Color augmentation (AlexNet).</li>
+<li>Image on Hard Disk –&gt; CPU Thread distorts image –&gt; Another thread does the training.</li>
+</ul>
+<h3 id="state-of-computer-vision">State of Computer vision</h3>
+<ul>
+<li>Lots of data is present for Speech recognition. But lesser for Image recognition.</li>
+<li>Either Labelled data or Hand engineer data for Computer Vision.</li>
+<li>Ensembling - Train lots of networks(3-15) and average their outputs. Good for Competitions. Not as great for real world.</li>
+<li>Multi-crop - Crop images in multiple ways and average the output.</li>
+<li>Not really used for Production.</li>
+</ul>
+</body>
+</html>

@@ -36,7 +36,8 @@ pandoc MLStrategy2.md -f markdown+tex_math_dollars -s -o MLStrategy2.html --math
 * It cannot be used, when the learning does not have anything in common with final solution.
 
 # Multi task learning
-* Classification with multiple labels instead of 1.
+* Classification with multiple labels instead of 1, using the same neural network.
+* Identifying multiple objects instead of one, might have common problems to be solved, which can be added into a single network.
 
 # End to End Learning
 * Instead of splitting problem into sequential steps, A single neural network learns all the steps.
